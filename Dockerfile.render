@@ -35,9 +35,5 @@ ENV PYTHONPATH=/app
 
 EXPOSE 10000
 
-# Health check endpoint
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:10000/health || exit 1
-
-# Start the Hermes Gateway API Server
-CMD ["python", "-m", "gateway.run"]
+# Start the Hermes Gateway API Server via Render-aware entrypoint
+CMD ["python", "entrypoint.py"]
