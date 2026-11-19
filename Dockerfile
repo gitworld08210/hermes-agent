@@ -13,11 +13,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install uv for high-speed package resolution
 RUN pip install --no-cache-dir uv
 
+# Copy requirements first for Docker cache optimization
+COPY requirements.txt /app/requirements.txt
+
+# Explicitly install all core requirements into Python environment
+RUN uv pip install --system -r /app/requirements.txt
+
 # Copy project files
 COPY . /app
 
-# Install dependencies using uv into system environment
-RUN uv pip install --system -e .
+# Install hermes-agent in editable mode without re-resolving dependencies
+RUN uv pip install --system --no-deps -e .
 
 # Environment configuration for Render deployment
 ENV PYTHONUNBUFFERED=1
@@ -25,6 +31,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV API_SERVER_HOST=0.0.0.0
 ENV API_SERVER_PORT=10000
 ENV PORT=10000
+ENV PYTHONPATH=/app
 
 EXPOSE 10000
 
