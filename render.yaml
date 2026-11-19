@@ -2,7 +2,7 @@ services:
   - type: web
     name: hydrogen-hermes-agent
     runtime: docker
-    dockerfilePath: ./Dockerfile.render
+    dockerfilePath: ./Dockerfile
     plan: free
     region: oregon
     autoDeploy: true
